@@ -1,41 +1,21 @@
-from tabnanny import check
-
+from src.day_4.solution_4_1 import WordsearchFinder
 from src.utilities.timer import run_timed
 
 
-DIAGONAL_DIRECTIONS_TO_CHECK = [
-    (1, -1),
-    (1, 1),
-    (-1, 1),
-    (-1, -1)
-]
+class MasXFinder(WordsearchFinder):
 
-SECOND_M_DIRECTIONS_TO_CHECK = {
-    (1, -1): [(1, 1), (-1, -1)],
-    (1, 1): [(-1, 1), (1, -1)],
-    (-1, 1): [(-1, -1), (1, 1)],
-    (-1, -1): [(1, -1), (-1, 1)],
-}
-
-
-class MasXFinder:
-    def __init__(self, input_lines: list[str]) -> None:
-
-        self.input_lines = input_lines
-        self.max_ix = len(input_lines) - 1
-        self.max_jx = len(input_lines[0]) - 1
-
-    def search_for_letter(self, letter_to_find: str, start_ix: int, start_jx: int, ix_step: int, jx_step: int) -> bool:
-
-        check_ix = start_ix + ix_step
-        check_jx = start_jx + jx_step
-        if (check_ix < 0) or (check_ix > self.max_ix) or (check_jx < 0) or (check_jx > self.max_jx):
-            return False
-
-        if self.input_lines[check_ix][check_jx] == letter_to_find:
-            return True
-
-        return False
+    diagonal_directions_to_check = [
+        (1, -1),
+        (1, 1),
+        (-1, 1),
+        (-1, -1)
+    ]
+    second_m_directions_to_check = {
+        (1, -1): [(1, 1), (-1, -1)],
+        (1, 1): [(-1, 1), (1, -1)],
+        (-1, 1): [(-1, -1), (1, 1)],
+        (-1, -1): [(1, -1), (-1, 1)],
+    }
 
     def search_for_m(
         self, start_ix: int, start_jx: int, directions_to_check: list[tuple[int, int]]
@@ -52,18 +32,18 @@ class MasXFinder:
 
     def check_for_mas_x(self, start_ix: int, start_jx: int) -> bool:
 
-        first_m_found, first_m_direction = self.search_for_m(start_ix, start_jx, DIAGONAL_DIRECTIONS_TO_CHECK)
+        first_m_found, first_m_direction = self.search_for_m(start_ix, start_jx, self.diagonal_directions_to_check)
         if not first_m_found:
             return False
 
         second_m_found, second_m_direction = self.search_for_m(
-            start_ix, start_jx, SECOND_M_DIRECTIONS_TO_CHECK[first_m_direction]
+            start_ix, start_jx, self.second_m_directions_to_check[first_m_direction]
         )
         if not second_m_found:
             return False
 
         s_directions_to_check = [
-            x for x in DIAGONAL_DIRECTIONS_TO_CHECK if x != second_m_direction and x != first_m_direction
+            x for x in self.diagonal_directions_to_check if x != second_m_direction and x != first_m_direction
         ]
         first_s_found = self.search_for_letter(
             'S', start_ix, start_jx, s_directions_to_check[0][0], s_directions_to_check[0][1]
