@@ -2,6 +2,7 @@ import re
 
 from src.utilities.timer import run_timed
 
+
 def solution() -> None:
     with open('src/day_3/input_3_1.txt', 'r') as file:
         input_text = file.read()
