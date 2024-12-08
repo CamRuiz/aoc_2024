@@ -42,7 +42,6 @@ class PathBlockChecker(PathChecker):
         self, check_location: tuple[int, int], direction: tuple[int, int],
     ) -> bool:
 
-
         input_lines_with_new_blocker = self.input_lines.copy()
         new_row = (
             self.input_lines[check_location[0]][:check_location[1]] +
