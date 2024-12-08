@@ -5,6 +5,16 @@ import numpy as np
 from src.utilities.timer import run_timed
 
 
+def get_antenna_locations(input_lines: list[str]) -> defaultdict[str, np.ndarray]:
+
+    antenna_locations = defaultdict(list)
+    for ix, line in enumerate(input_lines):
+        for jx, char in enumerate(line):
+            if char != '.':
+                antenna_locations[char].append(np.array([ix, jx]))
+
+    return antenna_locations
+
 def check_is_in_bounds(location: tuple[float, float], max_ix: int, max_jx: int) -> bool:
     ix, jx = location
     return (ix >= 0) & (ix <= max_ix) & (jx >= 0) & (jx <= max_jx)
@@ -34,11 +44,9 @@ def solution() -> None:
     with open('src/day_8/input_8_1.txt', 'r') as file:
         input_lines = file.read().splitlines()
 
-    antenna_locations = defaultdict(list)
-    for ix, line in enumerate(input_lines):
-        for jx, char in enumerate(line):
-            if char != '.':
-                antenna_locations[char].append(np.array([ix, jx]))
+    max_ix = len(input_lines) - 1
+    max_jx = len(input_lines[0]) - 1
+    antenna_locations = get_antenna_locations(input_lines)
 
     antinode_locations = []
     for frequency, antennas in antenna_locations.items():
@@ -47,12 +55,10 @@ def solution() -> None:
             antinode_locations += get_antinode_locations(pair[0], pair[1])
 
     antinode_locations = list(set(antinode_locations))
-
-    max_ix = len(input_lines) - 1
-    max_jx = len(input_lines[0]) - 1
     antinode_locations = [x for x in antinode_locations if check_is_valid_antinode_location(x, max_ix, max_jx)]
 
     print(len(antinode_locations))
+
 
 def main() -> None:
     run_timed(solution)
