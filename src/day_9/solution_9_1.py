@@ -20,14 +20,14 @@ def get_compacted_disk_map(disk_map: str) -> list[int]:
                 compacted_disk += [end_index // 2] * values_to_add_from_end
                 disk_map[start_index] -= values_to_add_from_end
                 end_index -= 2
-            elif values_to_add_from_end > spaces_to_fill:
-                compacted_disk += [end_index // 2] * spaces_to_fill
-                disk_map[end_index] -= spaces_to_fill
-                start_index += 1
-            else:
+            elif values_to_add_from_end == spaces_to_fill:
                 compacted_disk += [end_index // 2] * values_to_add_from_end
                 start_index += 1
                 end_index -= 2
+            else:
+                compacted_disk += [end_index // 2] * spaces_to_fill
+                disk_map[end_index] -= spaces_to_fill
+                start_index += 1
 
     return compacted_disk
 
